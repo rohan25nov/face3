@@ -1,0 +1,30 @@
+nav .nav-wrapper{
+	background-color: #263238 ;
+}
+nav .brand-logo.center{
+	left: 10%;
+}
+.active{
+	background-color:white;
+}
+.btn-floating i {
+	background-color:black;
+	color:#ffd0b0; 
+}
+body{
+	background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0worLHEHqQkQRz3virJJ1w6dDzwz1Zq2W9Hu1Dtdt781VtxH5QQ);
+}
+.card .card-content p{
+	background-color: #f2efed;
+}
+.card .card-content{
+	background-color: #ceccca;
+
+}
+.card .card-action {
+	border-top: 0px;
+}
+
+input::-webkit-input-placeholder{
+	color:grey;
+};

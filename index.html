@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="./css/master.css">
+
+    <script src="include/jquery.min.js"></script>
+    <script src="include/angular.min.js"></script>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript">
+
+    </script>
+    <script>
+        var canvas, ctx,video,webcamStream;
+
+        //--------------------
+        // GET USER MEDIA CODE
+        //--------------------
+        navigator.getUserMedia = ( navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia);
+
+
+        var app=angular.module('myApp',[]);
+        app.controller('myContr',function ($scope,$http) {
+            canvas = document.getElementById("myCanvas");
+            ctx = canvas.getContext('2d');
+            $scope.startWebcam=function() {
+                $('#video').show();
+                $('#myCanvas').hide();
+                if (navigator.getUserMedia) {
+                    navigator.getUserMedia (
+
+                        // constraints
+                        {
+                            video: true,
+                            audio: false
+                        },
+
+                        // successCallback
+                        function(localMediaStream) {
+                            video = document.querySelector('video');
+                            video.src = window.URL.createObjectURL(localMediaStream);
+                            webcamStream = localMediaStream;
+                        },
+
+                        // errorCallback
+                        function(err) {
+                            console.log("The following error occured: " + err);
+                        }
+                    );
+                } else {
+                    console.log("getUserMedia not supported");
+                }
+            }
+
+            $scope.snapshot=function() {
+                $('#myCanvas').show();
+                $('#video').hide();
+                ctx.drawImage(video, 0,0, canvas.width, canvas.height);
+                //account/Authenticate
+                $http.get("http://api.skybiometry.com/fc/account/namespaces.json?api_key=pqmlut4gadi2o1s2vuki4r6bqs&api_secret=k0qsavdcbta3p6dm1vdinrctb3").then(function (res) {
+                    $scope.myData=res.data;
+                    alert($scope.myData["status"]);
+                })
+            }
+        })
+
+    </script>
+</head>
+
+<body ng-controller="myContr">
+<!--Import jQuery before materialize.js-->
+
+        <div class="container">
+            <div class="card center">
+
+                <div class="card-content">
+                    <div class="input-field col s6">
+                        <input placeholder="Enter Name" type="text" class="validate" id="ip">
+                    </div>
+                    <p>
+                        <video ng-click="snapshot();" width=300 height=300 id="video" controls autoplay></video>
+                        <br/>
+                        <canvas style="display: none"  id="myCanvas" width="300" height="230"></canvas>
+                    </p>
+                    <div class="card-action">
+                        <a class="btn-floating btn-large waves-effect waves-light red" ng-click="startWebcam();"><i class="material-icons">camera</i></a>
+                        <a class="btn-floating btn-large waves-effect waves-light red" ng-click="snapshot();"><i class="material-icons">verified_user</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
